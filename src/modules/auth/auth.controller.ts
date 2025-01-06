@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { User } from "../user/user.model";
 import bcrypt from "bcryptjs";
-import generateToken from "../../utils/auth";
+import { loginService, registerService } from "./auth.service";
+import { IUser } from "../user/user.interface";
 
 const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -14,8 +15,9 @@ const registerUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
+    const userData = { name, email, password };
+    const user = await registerService(userData as IUser);
+
     res.status(201).json({
       id: user.id,
       name: user.name,
@@ -44,7 +46,8 @@ const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = generateToken(user._id, user.role);
+    // const token = generateToken(user._id, user.role);
+    const token = await loginService(user._id, user.role);
     res.status(200).json({
       token,
       message: "user login successful",
