@@ -1,8 +1,17 @@
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import config from "../app/config";
+
+interface TokenPayload {
+  id: mongoose.Types.ObjectId;
+  role: string;
+}
+
+
 const generateToken = (id: mongoose.Types.ObjectId, role: string) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET || "secret", {
-    expiresIn: "1d",
+  const payload: TokenPayload = { id, role };
+  return jwt.sign(payload, config.JWT_SECRET || "secret", {
+    expiresIn: config.JWT_EXPIRATION,
   });
 };
 

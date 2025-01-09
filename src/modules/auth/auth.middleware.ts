@@ -1,44 +1,62 @@
-import jwt from "jsonwebtoken";
-import { NextFunction, Request, Response } from "express";
-import { IUser } from "../user/user.interface";
-import { User } from "../user/user.model";
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { IUser } from '../user/user.interface';
+import { User } from '../user/user.model';
 
 interface AuthRequest extends Request {
   user?: IUser;
 }
 
-export const protect = async (
+interface DecodedToken {
+  id: string;
+}
+
+const authenticate = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
-) => {
+  next: NextFunction,
+): Promise<void> => {
   let token;
-  try {
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
-    ) {
-      token = req.headers.authorization.split(" ")[1];
-      const decoded: any = jwt.verify(
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(
         token,
-        process.env.JWT_SECRET || "secret"
-      );
-      const user = await User.findById(decoded._id).select("-password");
+        process.env.JWT_SECRET || 'secret',
+      ) as DecodedToken;
+      console.log(decoded);
+
+      const user = await User.findById(decoded.id).select('-password');
       if (!user) {
-        return res.status(401).json({ message: "User not found" });
+        res
+          .status(404)
+          .json({ success: false, message: 'User not found', statusCode: 404 });
+        return;
       }
-      req.user = user as IUser;
+      console.log(user);
+      
+
+      req.user = user;
       next();
+    } catch (error) {
+      res
+        .status(403)
+        .json({
+          success: false,
+          message: 'Invalid token',
+          statusCode: 403,
+          error,
+        });
     }
-  } catch (error) {
-    res.status(401).json({ message: "Not authorized" });
+  } else {
+    res
+      .status(401)
+      .json({ success: false, message: 'No token provided', statusCode: 401 });
   }
 };
 
-export const admin = (req: AuthRequest, res: Response, next: NextFunction) => {
-  if (req.user && req.user.role === "admin") {
-    next();
-  } else {
-    res.status(403).json({ message: "Not authorized as admin" });
-  }
-};
+export default authenticate;
