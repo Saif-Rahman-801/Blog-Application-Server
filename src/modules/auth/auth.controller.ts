@@ -3,12 +3,11 @@ import { User } from '../user/user.model';
 import { loginService, registerService } from './auth.service';
 import { IUser } from '../user/user.interface';
 import bcrypt from 'bcrypt';
-import { registerUserSchema } from '../user/user.validation';
+import { loginUserSchema, registerUserSchema } from '../user/user.validation';
 import { z } from 'zod';
 
 const registerUser = async (req: Request, res: Response) => {
   try {
-    // Validate request body with Zod schema
     const validatedData = registerUserSchema.parse(req.body);
 
     const { name, email, password } = validatedData;
@@ -61,7 +60,7 @@ const registerUser = async (req: Request, res: Response) => {
 const loginUser = async (req: Request, res: Response) => {
   try {
 
-    const validatedData = registerUserSchema.parse(req.body);
+    const validatedData = loginUserSchema.parse(req.body);
 
     const { email, password } = validatedData;
     const user = await User.findOne({ email });
