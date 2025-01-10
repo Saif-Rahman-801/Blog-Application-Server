@@ -33,11 +33,19 @@ export const createBlog = async (req: AuthRequest, res: Response) => {
 
     const newBlog = new Blog({ title, content, author: authorId });
     const savedBlog = await newBlog.save();
+
+    const populatedBlog = await Blog.findById(savedBlog._id).populate<{ author: IUser }>('author', 'name email _id').exec();
+
+    if (!populatedBlog) {
+        return res.status(500).json({ success: false, message: 'Failed to populate blog author', statusCode: 500 });
+    }
+
+
     res.status(201).json({
       success: true,
       message: 'Blog created successfully',
       statusCode: 201,
-      data: savedBlog,
+      data: populatedBlog,
     });
   } catch (error) {
     console.error(error);
