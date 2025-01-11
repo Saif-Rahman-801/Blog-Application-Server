@@ -28,7 +28,7 @@ const authenticate = async (
         token,
         process.env.JWT_SECRET || 'secret',
       ) as DecodedToken;
-      console.log(decoded);
+      // console.log(decoded);
 
       const user = await User.findById(decoded.id).select('-password');
       if (!user) {
@@ -37,7 +37,7 @@ const authenticate = async (
           .json({ success: false, message: 'User not found', statusCode: 404 });
         return;
       }
-      console.log(user);
+      // console.log(user);
       
 
       req.user = user;
