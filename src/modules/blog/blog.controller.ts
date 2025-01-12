@@ -240,7 +240,10 @@ export const getBlogs = async (req: Request, res: Response) => {
 
     sort[sortBy as string] = sortOrder === 'asc' ? 1 : -1;
 
-    const blogs = await Blog.find(query).sort(sort).populate('author');
+    const blogs = await Blog.find(query).sort(sort).populate({
+      path: 'author',
+      select: '-password', 
+    });
 
     // Send the response
     res.status(200).json({
