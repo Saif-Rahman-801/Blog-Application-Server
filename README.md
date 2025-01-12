@@ -1,4 +1,3 @@
-"# Blog-Application-Server" 
 # Blog Backend Project
 
 ## Overview
@@ -11,6 +10,10 @@ This project is a backend for a blogging platform where users can write, update,
 - **Node.js**
 - **Express.js**
 - **MongoDB** with **Mongoose**
+
+## Live Link 
+- https://blog-application-server-sandy.vercel.app
+- [Live](https://blog-application-server-sandy.vercel.app/)
   
 ## Features and Requirements
 
