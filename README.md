@@ -321,7 +321,7 @@ Allows an admin to delete any blog post.
 
 1. Clone the repository:
    ```bash
-   git clone <[(https://github.com/Saif-Rahman-801/Blog-Application-Server.git)]>
+   git clone [(https://github.com/Saif-Rahman-801/Blog-Application-Server.git)]
    ```
 
 2. Install dependencies:
