@@ -114,7 +114,10 @@ export const updateBlog = async (req: AuthRequest, res: Response) => {
     }); */
 
     await blog.save();
-    await blog.populate("author");
+    await blog.populate({
+      path: 'author',
+      select: '-password', 
+    });
 
     if (!blog) {
       return res
