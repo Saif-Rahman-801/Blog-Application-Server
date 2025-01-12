@@ -60,11 +60,11 @@ const adminRolecheck = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
     const user = req.user;
     if (!user || user?.role !== 'admin') {
-      return res.status(403).json({
+      res.status(403).json({
         success: false,
         statusCode: 403,
         message: 'Forbidden: Admin access required',
@@ -81,5 +81,31 @@ const adminRolecheck = async (
     });
   }
 };
+const userRolecheck = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const user = req.user;
+    if (!user || user?.role !== 'user') {
+      res.status(403).json({
+        success: false,
+        statusCode: 403,
+        message: 'Forbidden: user access required',
+      });
+    }
 
-export { authenticate, adminRolecheck };
+    next();
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: 'Unauthorized: Invalid token',
+      statusCode: 401,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : 'Unknown error',
+    });
+  }
+};
+
+export { authenticate, adminRolecheck, userRolecheck };
