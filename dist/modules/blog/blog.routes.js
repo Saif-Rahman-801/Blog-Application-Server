@@ -11,7 +11,8 @@ const router = express_1.default.Router();
 router.post('/', auth_middleware_1.authenticate, auth_middleware_1.userRolecheck, (req, res, next) => {
     (0, blog_controller_1.createBlog)(req, res).catch(next);
 });
-router.get('/', auth_middleware_1.authenticate, 
+router.get('/', 
+// authenticate,
 // userRolecheck,
 (req, res, next) => {
     (0, blog_controller_1.getBlogs)(req, res).catch(next);

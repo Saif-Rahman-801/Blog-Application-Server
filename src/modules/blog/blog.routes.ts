@@ -15,7 +15,7 @@ router.post(
 
 router.get(
   '/',
-  authenticate,
+  // authenticate,
   // userRolecheck,
   (req: Request, res: Response, next: NextFunction) => {
     getBlogs(req, res).catch(next);
