@@ -13,10 +13,8 @@ app.use(cors());
 
 // App routes
 app.use('/api/auth', authRoutes);
-// app.use('/api/users',authenticate ,userRoutes);
 app.use('/api/blogs',blogRoutes);
 app.use('/api/admin',adminRoutes);
-// app.use('/api/orders', );
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Blogging app API!');
