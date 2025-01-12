@@ -4,7 +4,7 @@ import { adminRolecheck, authenticate } from '../auth/auth.middleware';
 
 const router = express.Router();
 
-router.post(
+router.patch(
   '/users/:userId/block',
   authenticate,
   adminRolecheck,
@@ -12,7 +12,7 @@ router.post(
     blockUser(req, res).catch(next);
   },
 );
-router.post(
+router.delete(
   '/blogs/:id',
   authenticate,
   adminRolecheck,

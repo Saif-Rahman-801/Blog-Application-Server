@@ -35,7 +35,6 @@ export const createBlog = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    // const authorId = req.user._id;
     const authorDetails = req.user;
 
     // Create the blog
@@ -45,15 +44,8 @@ export const createBlog = async (req: AuthRequest, res: Response) => {
       author: authorDetails._id,
     });
 
-    // Populate author details (optional)
     await blog.populate('author');
 
-    // const newBlog = new Blog({ title, content, author: authorDetails });
-    // const savedBlog = await newBlog.save();
-
-    // const populatedBlog = await Blog.findById(savedBlog._id)
-    //   .populate<{ author: IUser }>('author', 'name email _id')
-    //   .exec();
 
     if (!blog) {
       return res.status(500).json({
@@ -216,7 +208,6 @@ export const deleteBlog = async (req: AuthRequest, res: Response) => {
 
 export const getBlogs = async (req: Request, res: Response) => {
   try {
-    // Extract query parameters
     const {
       search,
       sortBy = 'createdAt',
@@ -224,7 +215,6 @@ export const getBlogs = async (req: Request, res: Response) => {
       filter,
     } = req.query;
 
-    // Build the query object
     const query: FilterQuery<IBlog> = {};
 
     if (search) {

@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { createBlog, deleteBlog, updateBlog } from './blog.controller';
+import { createBlog, deleteBlog, getBlogs, updateBlog } from './blog.controller';
 import { authenticate, userRolecheck } from '../auth/auth.middleware';
 
 const router = express.Router();
@@ -16,9 +16,9 @@ router.post(
 router.get(
   '/',
   authenticate,
-  userRolecheck,
+  // userRolecheck,
   (req: Request, res: Response, next: NextFunction) => {
-    createBlog(req, res).catch(next);
+    getBlogs(req, res).catch(next);
   },
 );
 
