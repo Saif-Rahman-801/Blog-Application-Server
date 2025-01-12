@@ -5,8 +5,9 @@ import {
 } from './blog.validation';
 import { Blog } from './blog.model';
 import { IUser } from '../user/user.interface';
-import mongoose from 'mongoose';
+import mongoose, { FilterQuery, SortOrder } from 'mongoose';
 import { z } from 'zod';
+import { IBlog } from './blog.interface';
 
 interface AuthRequest extends Request {
   user?: IUser;
@@ -164,6 +165,55 @@ export const deleteBlog = async (req:AuthRequest, res: Response) => {
       statusCode: 401,
       error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : 'Unknown error',
+    });
+  }
+}
+
+export const getBlogs = async (req:Request, res: Response) => {
+  try {
+
+     // Extract query parameters
+     const { search, sortBy = 'createdAt', sortOrder = 'desc', filter } = req.query;
+
+     // Build the query object
+     const query: FilterQuery<IBlog>= {};
+
+     if (search) {
+         query.$or = [
+             { title: { $regex: search, $options: 'i' } },
+             { content: { $regex: search, $options: 'i' } },
+         ];
+     }
+
+     if (filter) {
+         query.author = filter;
+     }
+
+     // Build the sort object
+    //  const sort: Record<string, 1 | -1>  = {};
+     const sort: Record<string, SortOrder>  = {};
+
+     sort[sortBy as string] = sortOrder === 'asc' ? 1 : -1;
+
+     const blogs = await Blog.find(query).sort(sort).populate('author');
+
+     // Send the response
+     res.status(200).json({
+         success: true,
+         message: 'Blogs fetched successfully',
+         statusCode: 200,
+         data: blogs,
+     });
+
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+        success: false,
+        message: 'An error occurred while fetching blogs',
+        statusCode: 500,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'Unknown error',
     });
   }
 }

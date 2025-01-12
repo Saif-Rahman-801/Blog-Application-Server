@@ -8,6 +8,10 @@ router.post("/",authenticate, (req: Request, res: Response, next: NextFunction) 
   createBlog(req, res).catch(next);
 });
 
+router.get("/",authenticate, (req: Request, res: Response, next: NextFunction) => {
+  createBlog(req, res).catch(next);
+});
+
 router.patch("/:id",authenticate, (req: Request, res: Response, next: NextFunction) => {
   updateBlog(req, res).catch(next);
 });

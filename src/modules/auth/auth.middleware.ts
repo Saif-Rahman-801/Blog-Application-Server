@@ -38,19 +38,16 @@ const authenticate = async (
         return;
       }
       // console.log(user);
-      
 
       req.user = user;
       next();
     } catch (error) {
-      res
-        .status(403)
-        .json({
-          success: false,
-          message: 'Invalid token',
-          statusCode: 403,
-          error,
-        });
+      res.status(403).json({
+        success: false,
+        message: 'Invalid token',
+        statusCode: 403,
+        error,
+      });
     }
   } else {
     res
@@ -59,4 +56,30 @@ const authenticate = async (
   }
 };
 
-export default authenticate;
+const adminRolecheck = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user = req.user;
+    if (!user || user?.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        statusCode: 403,
+        message: 'Forbidden: Admin access required',
+      });
+    }
+
+    next();
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: 'Unauthorized: Invalid token',
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : 'Unknown error',
+    });
+  }
+};
+
+export { authenticate, adminRolecheck };

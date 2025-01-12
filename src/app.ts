@@ -1,9 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import { authRoutes } from './modules/auth/auth.routes';
-import { userRoutes } from './modules/user/user.routes';
-import authenticate from './modules/auth/auth.middleware';
 import { blogRoutes } from './modules/blog/blog.routes';
+import { adminRoutes } from './modules/admin/admin.routes';
 
 
 const app = express();
@@ -14,8 +13,9 @@ app.use(cors());
 
 // App routes
 app.use('/api/auth', authRoutes);
-app.use('/api/users',authenticate ,userRoutes);
+// app.use('/api/users',authenticate ,userRoutes);
 app.use('/api/blogs',blogRoutes);
+app.use('/api/admin',adminRoutes);
 // app.use('/api/orders', );
 
 app.get('/', (req, res) => {
