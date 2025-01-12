@@ -215,7 +215,10 @@ const getBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //  const sort: Record<string, 1 | -1>  = {};
         const sort = {};
         sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
-        const blogs = yield blog_model_1.Blog.find(query).sort(sort).populate('author');
+        const blogs = yield blog_model_1.Blog.find(query).sort(sort).populate({
+            path: 'author',
+            select: '-password',
+        });
         // Send the response
         res.status(200).json({
             success: true,
