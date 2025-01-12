@@ -14,6 +14,10 @@ This project is a backend for a blogging platform where users can write, update,
 ## Live Link 
 - https://blog-application-server-sandy.vercel.app
 - [Live](https://blog-application-server-sandy.vercel.app/)
+
+## Admin Credentials
+- Email: admin@example.com
+- Password: securepassword
   
 ## Features and Requirements
 
