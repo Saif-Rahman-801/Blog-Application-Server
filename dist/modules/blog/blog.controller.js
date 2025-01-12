@@ -107,7 +107,10 @@ const updateBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
           new: true,
         }); */
         yield blog.save();
-        yield blog.populate("author");
+        yield blog.populate({
+            path: 'author',
+            select: '-password',
+        });
         if (!blog) {
             return res
                 .status(500)
