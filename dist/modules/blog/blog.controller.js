@@ -43,7 +43,10 @@ const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             content,
             author: authorDetails._id,
         });
-        yield blog.populate('author');
+        yield blog.populate({
+            path: 'author',
+            select: '-password',
+        });
         if (!blog) {
             return res.status(500).json({
                 success: false,

@@ -44,7 +44,10 @@ export const createBlog = async (req: AuthRequest, res: Response) => {
       author: authorDetails._id,
     });
 
-    await blog.populate('author');
+    await blog.populate({
+      path: 'author',
+      select: '-password', 
+    });
 
 
     if (!blog) {
